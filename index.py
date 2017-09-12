@@ -2,67 +2,66 @@
 
 import pygame, sys , random , time
 
-#check for initializing errors
+# check for initializing errors
 check_errors = pygame.init()
 if check_errors[1] > 0:
-	print("(!) Had{0} initializing errors,exiting...".format(check_errors[1]))
+    print("(!) Had {0} initializing errors, exiting...".format(check_errors[1]))
+    sys.exit(-1)
 else:
-	print("(+) Pygame successfully initialized!")
-
-#Surface for game
-playSurface = pygame.display.set_mode((720,460))
+    print("(+) PyGame successfully initialized!")
+ 
+# Play surface
+playSurface = pygame.display.set_mode((720, 460))
 pygame.display.set_caption('Snake game!')
-
-#colors
-red = pygame.Color(255,0,0) #gameover
-green = pygame.Color(0,255,0) # snake
-black = pygame.Color(0,0,0) # score
-white = pygame.Color(255,255,255) #background
-brown  = pygame.Color(165,42,42) #food
-
-#Fps controller
+ 
+# Colors
+red = pygame.Color(255, 0, 0) # gameover
+green = pygame.Color(0, 255, 0) #snake
+black = pygame.Color(0, 0, 0) #score
+white = pygame.Color(255, 255, 255) #background
+brown = pygame.Color(165, 42, 42) #food
+ 
+# FPS controller
 fpsController = pygame.time.Clock()
-
-#import variables
-snakePos = [100,50]
-snakeBody = [[100,50],[90,50],[80,50]]
-
+ 
+# Important varibles
+snakePos = [100, 50]
+snakeBody = [[100,50], [90,50], [80,50]]
+ 
 foodPos = [random.randrange(1,72)*10,random.randrange(1,46)*10]
 foodSpawn = True
-
+ 
 direction = 'RIGHT'
 changeto = direction
-
+ 
 score = 0
-
-
+ 
 # Game over function
-
 def gameOver():
-	myFont = pygame.font.SysFont('monaco' , 72)
-	GOsurf = myFont.render('Game over!',True,red)
-	GOrect = GOsurf.get_rect()
-	GOrect.midtop = (360,15)
-	playSurface.blit(GOsurf,GOrect)
-	showScore(0)
-	pygame.display.flip()
-
-	time.sleep(4)
-	pygame.quit()
-	sys.exit()
-
+    myFont = pygame.font.SysFont('monaco', 72)
+    GOsurf = myFont.render('Game over!', True, red)
+    GOrect = GOsurf.get_rect()
+    GOrect.midtop = (360, 15)
+    playSurface.blit(GOsurf,GOrect)
+    showScore(0)
+    pygame.display.flip()
+   
+    time.sleep(4)
+    pygame.quit() #pygame exit
+    sys.exit() #console exit
+   
 def showScore(choice=1):
-	sFont = pygame.font.SysFont('monaco',24)
-	Ssurf = sFont.render('Score: {0}'.format(score),True,black)
-	Srect = Ssurf.get_rect()
-	if choice == 1:
-		Srect.midtop = (80  ,10)
-	else:
-		Srect.midtop = (360, 120)
-	playSurface.blit(Ssurf,Srect)
-
-#Main logic of my game.....
-
+    sFont = pygame.font.SysFont('monaco', 24)
+    Ssurf = sFont.render('Score : {0}'.format(score) , True, black)
+    Srect = Ssurf.get_rect()
+    if choice == 1:
+        Srect.midtop = (80, 10)
+    else:
+        Srect.midtop = (360, 120)
+    playSurface.blit(Ssurf,Srect)
+   
+   
+# Main Logic of the game
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -79,18 +78,18 @@ while True:
                 changeto = 'DOWN'
             if event.key == pygame.K_ESCAPE:
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-	#direction validation
-	if changeto =='RIGHT' and not direction == 'LEFT':
-		direction ='RIGHT'
-	if changeto =='LEFT' and not direction == 'RIGHT':
-		direction ='LEFT'
-	if changeto =='UP' and not direction == 'DOWN':
-		direction = 'UP'
-	if changeto =='DOWN' and not direction == 'UP':
-		direction ='DOWN'
-
- # Update snake position [x,y]
+ 
+    # validation of direction
+    if changeto == 'RIGHT' and not direction == 'LEFT':
+        direction = 'RIGHT'
+    if changeto == 'LEFT' and not direction == 'RIGHT':
+        direction = 'LEFT'
+    if changeto == 'UP' and not direction == 'DOWN':
+        direction = 'UP'
+    if changeto == 'DOWN' and not direction == 'UP':
+        direction = 'DOWN'
+ 
+    # Update snake position [x,y]
     if direction == 'RIGHT':
         snakePos[0] += 10
     if direction == 'LEFT':
@@ -137,3 +136,5 @@ while True:
     #common stuff
     showScore()
     pygame.display.flip()
+   
+    fpsController.tick(24)
